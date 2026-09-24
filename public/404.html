@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>Punto Nexus</title>
+    <script>
+      // Fallback para GitHub Pages: redirige a la raíz con hash routing preservando la navegación
+      const segment = window.location.pathname;
+      const repo = segment.split('/')[1] || '';
+      window.location.replace(window.location.origin + (repo ? '/' + repo : '') + '/');
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
