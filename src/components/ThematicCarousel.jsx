@@ -7,7 +7,7 @@ export default function ThematicCarousel({ title, subtitle, icon, opportunities,
 
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
-      const scrollAmount = direction === "left" ? -340 : 340;
+      const scrollAmount = direction === "left" ? -360 : 360;
       scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
@@ -15,21 +15,43 @@ export default function ThematicCarousel({ title, subtitle, icon, opportunities,
   if (!opportunities || opportunities.length === 0) return null;
 
   return (
-    <div className="mb-8 sm:mb-12">
+    <div style={{ marginBottom: "3.5rem" }}>
       {/* Section Header */}
-      <div className="flex items-center justify-between gap-3 mb-4 sm:mb-6">
-        <div className="flex items-center gap-3 min-w-0">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: "1.25rem",
+          gap: "1rem"
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", minWidth: 0 }}>
           {icon && (
-            <div className="w-10 h-10 sm:w-11 sm:h-11 min-w-[40px] min-h-[40px] rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 flex-shrink-0">
+            <div
+              style={{
+                width: "40px",
+                height: "40px",
+                minWidth: "40px",
+                minHeight: "40px",
+                borderRadius: "var(--radius-md)",
+                background: "rgba(99, 102, 241, 0.15)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "var(--primary-light)",
+                flexShrink: 0
+              }}
+            >
               {icon}
             </div>
           )}
-          <div className="min-w-0">
-            <h3 className="text-base sm:text-xl md:text-2xl font-bold text-slate-100 truncate">
+          <div style={{ minWidth: 0 }}>
+            <h3 style={{ fontSize: "1.35rem", fontWeight: 700, color: "var(--text-main)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
               {title}
             </h3>
             {subtitle && (
-              <p className="text-xs sm:text-sm text-slate-400 mt-0.5 truncate hidden sm:block">
+              <p className="hidden sm:block" style={{ fontSize: "0.85rem", color: "var(--text-dim)", marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {subtitle}
               </p>
             )}
@@ -37,11 +59,12 @@ export default function ThematicCarousel({ title, subtitle, icon, opportunities,
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexShrink: 0 }}>
           {onSeeAll && (
             <button
               onClick={onSeeAll}
-              className="btn btn-ghost min-h-[44px] py-2 px-3 text-xs sm:text-sm text-indigo-400 hover:text-indigo-300 font-semibold"
+              className="btn btn-ghost"
+              style={{ fontSize: "0.85rem", padding: "0.5rem 0.75rem", minHeight: "44px", color: "var(--primary-light)" }}
             >
               Ver todas ({opportunities.length})
             </button>
@@ -49,7 +72,16 @@ export default function ThematicCarousel({ title, subtitle, icon, opportunities,
 
           <button
             onClick={() => scroll("left")}
-            className="hidden sm:flex min-w-[44px] min-h-[44px] w-11 h-11 items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
+            className="btn-icon hidden sm:flex"
+            style={{
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid var(--border-subtle)",
+              width: "44px",
+              height: "44px",
+              minWidth: "44px",
+              minHeight: "44px",
+              borderRadius: "var(--radius-md)"
+            }}
             aria-label="Desplazar a la izquierda"
           >
             <ChevronLeft size={20} />
@@ -57,7 +89,16 @@ export default function ThematicCarousel({ title, subtitle, icon, opportunities,
 
           <button
             onClick={() => scroll("right")}
-            className="hidden sm:flex min-w-[44px] min-h-[44px] w-11 h-11 items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
+            className="btn-icon hidden sm:flex"
+            style={{
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid var(--border-subtle)",
+              width: "44px",
+              height: "44px",
+              minWidth: "44px",
+              minHeight: "44px",
+              borderRadius: "var(--radius-md)"
+            }}
             aria-label="Desplazar a la derecha"
           >
             <ChevronRight size={20} />
@@ -65,9 +106,9 @@ export default function ThematicCarousel({ title, subtitle, icon, opportunities,
         </div>
       </div>
 
-      {/* Mobile subtitle when truncated above */}
+      {/* Mobile subtitle when hidden above */}
       {subtitle && (
-        <p className="text-xs text-slate-400 -mt-2 mb-3 sm:hidden">
+        <p className="block sm:hidden" style={{ fontSize: "0.8rem", color: "var(--text-dim)", marginBottom: "1rem", marginTop: "-0.5rem" }}>
           {subtitle}
         </p>
       )}
@@ -75,13 +116,25 @@ export default function ThematicCarousel({ title, subtitle, icon, opportunities,
       {/* Horizontal Native Touch Swipeable Container */}
       <div
         ref={scrollContainerRef}
-        className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-4 sm:gap-6 pb-4 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0"
-        style={{ WebkitOverflowScrolling: "touch" }}
+        className="no-scrollbar"
+        style={{
+          display: "flex",
+          gap: "1.5rem",
+          overflowX: "auto",
+          paddingBottom: "1.25rem",
+          scrollSnapType: "x mandatory",
+          WebkitOverflowScrolling: "touch"
+        }}
       >
         {opportunities.map((opp) => (
           <div
             key={opp.id}
-            className="flex-none w-[84vw] sm:w-[320px] md:w-[350px] snap-start"
+            style={{
+              flex: "0 0 340px",
+              maxWidth: "340px",
+              width: "85vw",
+              scrollSnapAlign: "start"
+            }}
           >
             <OpportunityCard opportunity={opp} />
           </div>

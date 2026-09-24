@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useApp } from "../context/AppContext";
 import {
   Search,
@@ -176,15 +177,15 @@ export default function ExploreView() {
     Object.values(searchFilters.specific || {}).some(Boolean)
   );
 
-  // Common Faceted Filter Body for both Desktop Sidebar and Mobile Drawer Modal
-  const renderFilterBody = (isMobile = false) => (
-    <div className="space-y-5">
+  // Common Faceted Filter Body
+  const renderFilterBody = () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
       {/* Category Global */}
       <div>
-        <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">
+        <label style={{ fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", color: "var(--text-dim)", display: "block", marginBottom: "0.6rem", letterSpacing: "0.05em" }}>
           Categoría Global
         </label>
-        <div className="space-y-1">
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
           {[
             { id: "todas", label: "Todas las categorías", icon: <Layers size={14} /> },
             { id: "empleo", label: "Empleos & Pasantías", icon: <Briefcase size={14} /> },
@@ -199,13 +200,23 @@ export default function ExploreView() {
               <button
                 key={cat.id}
                 onClick={() => handleCategorySelect(cat.id)}
-                className={`w-full min-h-[44px] flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-left ${
-                  isSelected
-                    ? "bg-indigo-600/25 text-indigo-300 border border-indigo-500/40 font-semibold"
-                    : "text-slate-300 hover:bg-white/5 border border-transparent"
-                }`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.6rem",
+                  padding: "0.55rem 0.85rem",
+                  borderRadius: "var(--radius-md)",
+                  background: isSelected ? "rgba(99, 102, 241, 0.18)" : "transparent",
+                  color: isSelected ? "#ffffff" : "var(--text-muted)",
+                  fontWeight: isSelected ? 600 : 400,
+                  fontSize: "0.85rem",
+                  border: isSelected ? "1px solid rgba(99, 102, 241, 0.35)" : "1px solid transparent",
+                  textAlign: "left",
+                  minHeight: "44px",
+                  cursor: "pointer"
+                }}
               >
-                <span className={isSelected ? "text-indigo-400" : "text-slate-400"}>
+                <span style={{ color: isSelected ? "var(--primary-light)" : "var(--text-dim)" }}>
                   {cat.icon}
                 </span>
                 <span>{cat.label}</span>
@@ -217,10 +228,10 @@ export default function ExploreView() {
 
       {/* Modality */}
       <div>
-        <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">
+        <label style={{ fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", color: "var(--text-dim)", display: "block", marginBottom: "0.6rem", letterSpacing: "0.05em" }}>
           Modalidad
         </label>
-        <div className="grid grid-cols-2 gap-1.5">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.4rem" }}>
           {[
             { id: "todas", label: "Cualquiera" },
             { id: "remoto", label: "Remoto" },
@@ -232,11 +243,17 @@ export default function ExploreView() {
               <button
                 key={mod.id}
                 onClick={() => handleModalitySelect(mod.id)}
-                className={`min-h-[44px] py-2 px-2.5 rounded-xl text-xs font-medium transition-all text-center ${
-                  isSelected
-                    ? "bg-indigo-600/30 text-indigo-200 border border-indigo-500/50 font-semibold"
-                    : "bg-white/5 text-slate-300 hover:bg-white/10 border border-white/5"
-                }`}
+                style={{
+                  padding: "0.5rem",
+                  borderRadius: "var(--radius-sm)",
+                  background: isSelected ? "rgba(99, 102, 241, 0.25)" : "rgba(255, 255, 255, 0.04)",
+                  border: isSelected ? "1px solid var(--primary-light)" : "1px solid var(--border-subtle)",
+                  color: isSelected ? "#ffffff" : "var(--text-muted)",
+                  fontSize: "0.8rem",
+                  fontWeight: isSelected ? 600 : 400,
+                  minHeight: "44px",
+                  cursor: "pointer"
+                }}
               >
                 {mod.label}
               </button>
@@ -247,10 +264,10 @@ export default function ExploreView() {
 
       {/* Cost */}
       <div>
-        <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">
+        <label style={{ fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", color: "var(--text-dim)", display: "block", marginBottom: "0.6rem", letterSpacing: "0.05em" }}>
           Costo / Inversión
         </label>
-        <div className="space-y-1">
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
           {[
             { id: "todas", label: "Todos los costos" },
             { id: "gratis", label: "100% Gratis / Sin costo" },
@@ -262,32 +279,42 @@ export default function ExploreView() {
               <button
                 key={cost.id}
                 onClick={() => handleCostSelect(cost.id)}
-                className={`w-full min-h-[44px] flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-left ${
-                  isSelected
-                    ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-semibold"
-                    : "text-slate-300 hover:bg-white/5 border border-transparent"
-                }`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "0.55rem 0.85rem",
+                  borderRadius: "var(--radius-sm)",
+                  background: isSelected ? "rgba(16, 185, 129, 0.18)" : "transparent",
+                  border: isSelected ? "1px solid rgba(16, 185, 129, 0.35)" : "1px solid transparent",
+                  color: isSelected ? "#34d399" : "var(--text-muted)",
+                  fontSize: "0.825rem",
+                  fontWeight: isSelected ? 600 : 400,
+                  textAlign: "left",
+                  minHeight: "44px",
+                  cursor: "pointer"
+                }}
               >
                 <span>{cost.label}</span>
-                {isSelected && <Check size={14} className="text-emerald-400" />}
+                {isSelected && <Check size={14} color="#10b981" />}
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Context Specific Filters: Empleo */}
+      {/* Context Specific: Empleo */}
       {searchFilters.category === "empleo" && (
-        <div className="border-t border-white/10 pt-4 space-y-3">
-          <span className="badge bg-blue-500/15 text-blue-400 border border-blue-500/30">
+        <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "1rem" }}>
+          <span className="badge" style={{ background: "rgba(59, 130, 246, 0.15)", color: "#60a5fa", marginBottom: "0.75rem", display: "inline-block" }}>
             Filtros Específicos: Empleo
           </span>
 
-          <div>
-            <label className="text-[11px] font-bold text-slate-400 block mb-1.5 uppercase">
+          <div style={{ marginBottom: "0.85rem" }}>
+            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-dim)", display: "block", marginBottom: "0.4rem" }}>
               Tipo de Jornada
             </label>
-            <div className="space-y-1">
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
               {[
                 { id: "pasantia", label: "Pasantía / Prácticas" },
                 { id: "tiempo_completo", label: "Tiempo Completo" },
@@ -296,11 +323,16 @@ export default function ExploreView() {
                 <button
                   key={j.id}
                   onClick={() => handleSpecificFilterChange("jornada", j.id)}
-                  className={`w-full min-h-[44px] px-3 py-2 rounded-xl text-xs sm:text-sm text-left transition-all ${
-                    searchFilters.specific?.jornada === j.id
-                      ? "bg-blue-600/30 text-blue-200 border border-blue-500/40 font-semibold"
-                      : "bg-white/5 text-slate-300 hover:bg-white/10 border border-transparent"
-                  }`}
+                  style={{
+                    padding: "0.45rem 0.75rem",
+                    borderRadius: "var(--radius-sm)",
+                    background: searchFilters.specific?.jornada === j.id ? "rgba(59, 130, 246, 0.25)" : "rgba(255,255,255,0.03)",
+                    color: searchFilters.specific?.jornada === j.id ? "#93c5fd" : "var(--text-muted)",
+                    fontSize: "0.8rem",
+                    textAlign: "left",
+                    minHeight: "44px",
+                    cursor: "pointer"
+                  }}
                 >
                   {j.label}
                 </button>
@@ -309,36 +341,45 @@ export default function ExploreView() {
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-400 block mb-1.5 uppercase">
+            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-dim)", display: "block", marginBottom: "0.4rem" }}>
               Remuneración
             </label>
             <button
               onClick={() => handleSpecificFilterChange("remuneracion", "remunerado")}
-              className={`w-full min-h-[44px] px-3 py-2 rounded-xl text-xs sm:text-sm text-left flex items-center justify-between transition-all ${
-                searchFilters.specific?.remuneracion === "remunerado"
-                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-semibold"
-                  : "bg-white/5 text-slate-300 hover:bg-white/10 border border-transparent"
-              }`}
+              style={{
+                width: "100%",
+                padding: "0.45rem 0.75rem",
+                borderRadius: "var(--radius-sm)",
+                background: searchFilters.specific?.remuneracion === "remunerado" ? "rgba(16, 185, 129, 0.2)" : "rgba(255,255,255,0.03)",
+                color: searchFilters.specific?.remuneracion === "remunerado" ? "#34d399" : "var(--text-muted)",
+                fontSize: "0.8rem",
+                textAlign: "left",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                minHeight: "44px",
+                cursor: "pointer"
+              }}
             >
               <span>Con Sueldo / Remunerado</span>
-              {searchFilters.specific?.remuneracion === "remunerado" && <Check size={14} className="text-emerald-400" />}
+              {searchFilters.specific?.remuneracion === "remunerado" && <Check size={14} color="#10b981" />}
             </button>
           </div>
         </div>
       )}
 
-      {/* Context Specific Filters: Cursos & Certificaciones */}
+      {/* Context Specific: Cursos & Certs */}
       {(searchFilters.category === "curso" || searchFilters.category === "certificacion" || searchFilters.category === "aprender") && (
-        <div className="border-t border-white/10 pt-4 space-y-3">
-          <span className="badge bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+        <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "1rem" }}>
+          <span className="badge" style={{ background: "rgba(16, 185, 129, 0.15)", color: "#34d399", marginBottom: "0.75rem", display: "inline-block" }}>
             Filtros Específicos: Cursos & Certs
           </span>
 
-          <div>
-            <label className="text-[11px] font-bold text-slate-400 block mb-1.5 uppercase">
+          <div style={{ marginBottom: "0.85rem" }}>
+            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-dim)", display: "block", marginBottom: "0.4rem" }}>
               Duración Estimada
             </label>
-            <div className="grid grid-cols-3 gap-1.5">
+            <div style={{ display: "flex", gap: "0.3rem" }}>
               {[
                 { id: "corta", label: "< 1 mes" },
                 { id: "media", label: "1-3 meses" },
@@ -347,11 +388,16 @@ export default function ExploreView() {
                 <button
                   key={d.id}
                   onClick={() => handleSpecificFilterChange("duracion", d.id)}
-                  className={`min-h-[44px] py-2 px-1 text-xs rounded-xl text-center transition-all ${
-                    searchFilters.specific?.duracion === d.id
-                      ? "bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 font-semibold"
-                      : "bg-white/5 text-slate-300 hover:bg-white/10 border border-transparent"
-                  }`}
+                  style={{
+                    flex: 1,
+                    padding: "0.4rem 0.25rem",
+                    borderRadius: "var(--radius-sm)",
+                    background: searchFilters.specific?.duracion === d.id ? "rgba(16, 185, 129, 0.25)" : "rgba(255,255,255,0.03)",
+                    color: searchFilters.specific?.duracion === d.id ? "#34d399" : "var(--text-muted)",
+                    fontSize: "0.75rem",
+                    minHeight: "44px",
+                    cursor: "pointer"
+                  }}
                 >
                   {d.label}
                 </button>
@@ -360,19 +406,25 @@ export default function ExploreView() {
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-400 block mb-1.5 uppercase">
+            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-dim)", display: "block", marginBottom: "0.4rem" }}>
               Nivel de Dificultad
             </label>
-            <div className="space-y-1">
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
               {["principiante", "intermedio", "avanzado"].map(lvl => (
                 <button
                   key={lvl}
                   onClick={() => handleSpecificFilterChange("nivel", lvl)}
-                  className={`w-full min-h-[44px] px-3 py-2 rounded-xl text-xs sm:text-sm capitalize text-left transition-all ${
-                    searchFilters.specific?.nivel === lvl
-                      ? "bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 font-semibold"
-                      : "bg-white/5 text-slate-300 hover:bg-white/10 border border-transparent"
-                  }`}
+                  style={{
+                    padding: "0.45rem 0.75rem",
+                    borderRadius: "var(--radius-sm)",
+                    background: searchFilters.specific?.nivel === lvl ? "rgba(16, 185, 129, 0.25)" : "rgba(255,255,255,0.03)",
+                    color: searchFilters.specific?.nivel === lvl ? "#34d399" : "var(--text-muted)",
+                    fontSize: "0.8rem",
+                    textTransform: "capitalize",
+                    textAlign: "left",
+                    minHeight: "44px",
+                    cursor: "pointer"
+                  }}
                 >
                   {lvl}
                 </button>
@@ -382,18 +434,18 @@ export default function ExploreView() {
         </div>
       )}
 
-      {/* Context Specific Filters: Becas */}
+      {/* Context Specific: Becas */}
       {searchFilters.category === "beca" && (
-        <div className="border-t border-white/10 pt-4 space-y-3">
-          <span className="badge bg-purple-500/15 text-purple-400 border border-purple-500/30">
+        <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "1rem" }}>
+          <span className="badge" style={{ background: "rgba(168, 85, 247, 0.15)", color: "#c084fc", marginBottom: "0.75rem", display: "inline-block" }}>
             Filtros Específicos: Becas
           </span>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-400 block mb-1.5 uppercase">
+            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-dim)", display: "block", marginBottom: "0.4rem" }}>
               Nivel Educativo
             </label>
-            <div className="space-y-1">
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
               {[
                 { id: "secundaria", label: "Preparatoria / Bachillerato" },
                 { id: "universitario", label: "Universidad / Pregrado" },
@@ -402,11 +454,16 @@ export default function ExploreView() {
                 <button
                   key={n.id}
                   onClick={() => handleSpecificFilterChange("nivelEducativo", n.id)}
-                  className={`w-full min-h-[44px] px-3 py-2 rounded-xl text-xs sm:text-sm text-left transition-all ${
-                    searchFilters.specific?.nivelEducativo === n.id
-                      ? "bg-purple-600/30 text-purple-200 border border-purple-500/40 font-semibold"
-                      : "bg-white/5 text-slate-300 hover:bg-white/10 border border-transparent"
-                  }`}
+                  style={{
+                    padding: "0.45rem 0.75rem",
+                    borderRadius: "var(--radius-sm)",
+                    background: searchFilters.specific?.nivelEducativo === n.id ? "rgba(168, 85, 247, 0.25)" : "rgba(255,255,255,0.03)",
+                    color: searchFilters.specific?.nivelEducativo === n.id ? "#d8b4fe" : "var(--text-muted)",
+                    fontSize: "0.8rem",
+                    textAlign: "left",
+                    minHeight: "44px",
+                    cursor: "pointer"
+                  }}
                 >
                   {n.label}
                 </button>
@@ -419,52 +476,91 @@ export default function ExploreView() {
   );
 
   return (
-    <div className="animate-fade-in px-4 sm:px-6 md:px-8 py-6 sm:py-10 pb-16">
-      <div className="container mx-auto">
+    <div className="animate-fade-in" style={{ padding: "2.5rem 0 5rem" }}>
+      <div className="container">
         
         {/* Page Title */}
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-2">
+        <div style={{ marginBottom: "2rem" }}>
+          <h1 style={{ fontSize: "2.2rem", fontWeight: 800, marginBottom: "0.5rem" }}>
             Explorar <span className="text-gradient">Oportunidades</span>
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm md:text-base max-w-xl">
+          <p style={{ color: "var(--text-muted)", fontSize: "1rem", maxWidth: "620px" }}>
             Busca y filtra entre ofertas verificadas de empleo, becas de estudio, certificaciones y fondos de financiamiento.
           </p>
         </div>
 
         {/* Big Search Input (100% width on mobile) */}
-        <div className="relative mb-4 sm:mb-6">
-          <div className="glass-panel w-full flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl border border-indigo-500/40 shadow-lg bg-slate-900/90">
-            <Search size={22} className="text-indigo-400 flex-shrink-0" />
+        <div style={{ position: "relative", marginBottom: "1.5rem" }}>
+          <div
+            className="glass-panel"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              padding: "0.75rem 1.25rem",
+              borderRadius: "var(--radius-lg)",
+              border: "1px solid var(--border-focus)",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.25)",
+              background: "rgba(21, 27, 46, 0.88)"
+            }}
+          >
+            <Search size={22} color="var(--primary-light)" style={{ flexShrink: 0 }} />
             <input
               type="text"
               value={searchTerm}
               onChange={handleSearchChange}
               placeholder="Buscar por cargo, habilidad (Python, React), institución o tema..."
-              className="w-full min-h-[44px] bg-transparent border-none text-slate-100 placeholder-slate-400 text-sm sm:text-base focus:outline-none"
+              style={{
+                width: "100%",
+                background: "transparent",
+                border: "none",
+                color: "var(--text-main)",
+                fontSize: "1.05rem",
+                minHeight: "44px"
+              }}
             />
             {searchTerm && (
               <button
                 onClick={() => {
                   setSearchFilters(prev => ({ ...prev, query: "" }));
                 }}
-                className="min-w-[44px] min-h-[44px] w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 text-slate-400 hover:text-white"
-                aria-label="Limpiar texto de búsqueda"
+                className="btn-icon"
+                style={{ width: "36px", height: "36px", minWidth: "36px", minHeight: "36px" }}
+                aria-label="Limpiar búsqueda"
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             )}
           </div>
 
           {/* Fuzzy Search Suggestion Banner */}
           {searchEvaluation.suggestion && (
-            <div className="mt-2.5 p-3 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center gap-2 text-xs sm:text-sm text-indigo-200 animate-fade-in">
-              <Sparkles size={16} className="text-indigo-400 flex-shrink-0" />
+            <div
+              className="animate-fade-in"
+              style={{
+                marginTop: "0.75rem",
+                padding: "0.6rem 1rem",
+                borderRadius: "var(--radius-md)",
+                background: "rgba(99, 102, 241, 0.12)",
+                border: "1px solid rgba(99, 102, 241, 0.3)",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                fontSize: "0.875rem",
+                color: "#c7d2fe"
+              }}
+            >
+              <Sparkles size={16} color="var(--primary-light)" />
               <span>
                 ¿Quizás quisiste decir:{" "}
                 <button
                   onClick={() => handleApplySuggestion(searchEvaluation.suggestion)}
-                  className="font-bold underline text-white hover:text-indigo-300"
+                  style={{
+                    color: "#ffffff",
+                    fontWeight: 700,
+                    textDecoration: "underline",
+                    cursor: "pointer"
+                  }}
                 >
                   "{searchEvaluation.suggestion}"
                 </button>
@@ -476,50 +572,62 @@ export default function ExploreView() {
 
         {/* Active Filter Pills Bar */}
         {hasActiveFilters && (
-          <div className="flex flex-wrap items-center gap-2 mb-4 p-3 bg-white/5 rounded-xl border border-white/10">
-            <span className="text-xs text-slate-400 font-semibold">
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              gap: "0.5rem",
+              marginBottom: "1.5rem",
+              padding: "0.6rem 1rem",
+              background: "rgba(255, 255, 255, 0.03)",
+              borderRadius: "var(--radius-md)",
+              border: "1px solid var(--border-subtle)"
+            }}
+          >
+            <span style={{ fontSize: "0.8rem", color: "var(--text-dim)", fontWeight: 600 }}>
               Filtros activos:
             </span>
 
             {searchFilters.query && (
-              <span className="badge badge-pill-tag text-xs bg-indigo-500/20 text-indigo-300">
+              <span className="badge badge-pill-tag" style={{ background: "rgba(99, 102, 241, 0.15)", color: "#a5b4fc" }}>
                 Búsqueda: "{searchFilters.query}"
                 <X
                   size={12}
-                  className="cursor-pointer ml-1 inline"
+                  style={{ cursor: "pointer", marginLeft: "4px" }}
                   onClick={() => setSearchFilters(prev => ({ ...prev, query: "" }))}
                 />
               </span>
             )}
 
             {searchFilters.category !== "todas" && (
-              <span className="badge badge-pill-tag text-xs bg-indigo-500/20 text-indigo-300">
-                Categoría: {searchFilters.category === "aprender" ? "Cursos & Certs" : searchFilters.category}
+              <span className="badge badge-pill-tag" style={{ background: "rgba(99, 102, 241, 0.15)", color: "#a5b4fc" }}>
+                Categoría: {searchFilters.category === "aprender" ? "Cursos & Certificaciones" : searchFilters.category}
                 <X
                   size={12}
-                  className="cursor-pointer ml-1 inline"
+                  style={{ cursor: "pointer", marginLeft: "4px" }}
                   onClick={() => handleCategorySelect("todas")}
                 />
               </span>
             )}
 
             {searchFilters.modality !== "todas" && (
-              <span className="badge badge-pill-tag text-xs">
+              <span className="badge badge-pill-tag">
                 Modalidad: {searchFilters.modality}
                 <X
                   size={12}
-                  className="cursor-pointer ml-1 inline"
+                  style={{ cursor: "pointer", marginLeft: "4px" }}
                   onClick={() => handleModalitySelect("todas")}
                 />
               </span>
             )}
 
             {searchFilters.cost !== "todas" && (
-              <span className="badge badge-pill-tag text-xs">
+              <span className="badge badge-pill-tag">
                 Costo: {searchFilters.cost.replace("_", " ")}
                 <X
                   size={12}
-                  className="cursor-pointer ml-1 inline"
+                  style={{ cursor: "pointer", marginLeft: "4px" }}
                   onClick={() => handleCostSelect("todas")}
                 />
               </span>
@@ -528,11 +636,11 @@ export default function ExploreView() {
             {Object.entries(searchFilters.specific || {}).map(([key, val]) => {
               if (!val) return null;
               return (
-                <span key={key} className="badge badge-pill-tag text-xs text-cyan-400">
+                <span key={key} className="badge badge-pill-tag" style={{ color: "#38bdf8" }}>
                   {key}: {String(val)}
                   <X
                     size={12}
-                    className="cursor-pointer ml-1 inline"
+                    style={{ cursor: "pointer", marginLeft: "4px" }}
                     onClick={() => handleSpecificFilterChange(key, val)}
                   />
                 </span>
@@ -541,99 +649,153 @@ export default function ExploreView() {
 
             <button
               onClick={clearAllFilters}
-              className="min-h-[44px] ml-auto text-xs text-rose-400 hover:text-rose-300 font-semibold inline-flex items-center gap-1.5 py-1 px-2.5 rounded-lg hover:bg-rose-500/10"
+              style={{
+                marginLeft: "auto",
+                fontSize: "0.78rem",
+                color: "#f87171",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.3rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                minHeight: "44px",
+                padding: "0.25rem 0.5rem"
+              }}
             >
-              <RotateCcw size={13} /> Limpiar todos
+              <RotateCcw size={12} /> Limpiar filtros
             </button>
           </div>
         )}
 
-        {/* Mobile Filter Toggle & Sort Header */}
-        <div className="flex items-center justify-between gap-3 mb-5">
-          {/* Mobile Filter Trigger Button (hidden on desktop lg:hidden) */}
+        {/* Top Controls: Mobile Filter Button & Sorting */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+          {/* Mobile Filter Toggle Button (hidden on desktop >=1024px) */}
           <button
             onClick={() => setMobileFilterOpen(true)}
-            className="lg:hidden btn btn-secondary min-h-[44px] py-2.5 px-4 text-xs sm:text-sm font-semibold rounded-xl flex items-center gap-2 border-indigo-500/30"
+            className="btn btn-secondary mobile-filter-trigger"
+            style={{
+              fontSize: "0.85rem",
+              padding: "0.55rem 1rem",
+              minHeight: "44px"
+            }}
           >
-            <Filter size={16} className="text-indigo-400" />
-            <span>Filtros</span>
-            {hasActiveFilters && (
-              <span className="w-2 h-2 rounded-full bg-indigo-400" />
-            )}
+            <Filter size={15} color="var(--primary-light)" />
+            <span>Filtros {hasActiveFilters && "•"}</span>
           </button>
 
-          {/* Results count label */}
-          <span className="text-xs sm:text-sm text-slate-400 hidden sm:inline">
-            Mostrando <strong className="text-white">{filteredResults.length}</strong> {filteredResults.length === 1 ? "oportunidad" : "oportunidades"}
+          <span className="hidden sm:inline" style={{ fontSize: "0.9rem", color: "var(--text-muted)" }}>
+            Mostrando <strong style={{ color: "var(--text-main)" }}>{filteredResults.length}</strong> {filteredResults.length === 1 ? "oportunidad" : "oportunidades"}
           </span>
 
-          {/* Sort dropdown */}
-          <div className="flex items-center gap-2 ml-auto">
-            <span className="text-xs text-slate-400 hidden xs:inline">Ordenar:</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginLeft: "auto" }}>
+            <span style={{ fontSize: "0.825rem", color: "var(--text-dim)" }}>Ordenar por:</span>
             <select
               value={searchFilters.sort}
               onChange={(e) => handleSortChange(e.target.value)}
-              className="min-h-[44px] py-2 px-3 bg-slate-900 border border-white/15 rounded-xl text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
+              style={{
+                background: "var(--bg-card)",
+                border: "1px solid var(--border-subtle)",
+                borderRadius: "var(--radius-sm)",
+                padding: "0.5rem 0.85rem",
+                color: "var(--text-main)",
+                fontSize: "0.85rem",
+                minHeight: "44px"
+              }}
             >
               <option value="relevancia">Relevancia</option>
-              <option value="urgencia">Cierre próximo</option>
+              <option value="urgencia">Cierre más próximo</option>
               <option value="recientes">Más recientes</option>
             </select>
           </div>
         </div>
 
-        {/* Main Grid Layout: Desktop Sidebar + Results Cards */}
-        <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 items-start">
+        {/* Main Grid: Desktop Sidebar + Results Grid */}
+        <div className="explore-main-layout">
           
-          {/* DESKTOP SIDEBAR FILTERS (hidden on mobile, visible on lg+) */}
-          <aside className="hidden lg:block w-72 lg:w-80 flex-shrink-0 glass-panel p-5 rounded-2xl border border-white/10 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto bg-slate-900/70">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
-              <div className="flex items-center gap-2">
-                <Filter size={16} className="text-indigo-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">Filtros</h3>
+          {/* DESKTOP SIDEBAR (hidden on mobile, visible on desktop >=1024px) */}
+          <aside
+            className="glass-panel explore-desktop-sidebar"
+            style={{
+              padding: "1.5rem",
+              borderRadius: "var(--radius-lg)",
+              height: "fit-content",
+              position: "sticky",
+              top: "90px",
+              background: "rgba(21, 27, 46, 0.85)",
+              border: "1px solid var(--border-subtle)"
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "0.75rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <Filter size={16} color="var(--primary-light)" />
+                <h3 style={{ fontSize: "0.95rem", fontWeight: 700 }}>Filtros de Búsqueda</h3>
               </div>
               {hasActiveFilters && (
                 <button
                   onClick={clearAllFilters}
-                  className="text-xs text-slate-400 hover:text-rose-400 underline font-semibold"
+                  style={{ fontSize: "0.75rem", color: "var(--text-dim)", textDecoration: "underline", cursor: "pointer" }}
                 >
                   Restablecer
                 </button>
               )}
             </div>
 
-            {renderFilterBody(false)}
+            {renderFilterBody()}
           </aside>
 
           {/* MAIN RESULTS COLUMN */}
-          <main className="w-full flex-1 min-w-0">
+          <main style={{ minWidth: 0, width: "100%" }}>
             {filteredResults.length > 0 ? (
-              /* Grid: 1 col on mobile (grid-cols-1), 2 on tablet (md:grid-cols-2), 3 on desktop (xl:grid-cols-3) */
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+              /* Grid of cards: spacious with 1.75rem gap */
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+                  gap: "1.75rem"
+                }}
+              >
                 {filteredResults.map((opp) => (
                   <OpportunityCard key={opp.id} opportunity={opp} />
                 ))}
               </div>
             ) : (
-              /* Zero Results Prevention View */
-              <div className="glass-panel p-8 sm:p-12 text-center rounded-2xl border border-dashed border-white/15 bg-slate-900/60">
-                <div className="w-16 h-16 rounded-full bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto mb-4">
+              /* Zero Results Prevention */
+              <div
+                className="glass-panel animate-fade-in"
+                style={{
+                  padding: "3.5rem 2rem",
+                  textAlign: "center",
+                  borderRadius: "var(--radius-xl)",
+                  border: "1px dashed rgba(255, 255, 255, 0.15)",
+                  background: "rgba(21, 27, 46, 0.65)"
+                }}
+              >
+                <div
+                  style={{
+                    width: "64px",
+                    height: "64px",
+                    borderRadius: "50%",
+                    background: "rgba(244, 63, 94, 0.1)",
+                    color: "#f43f5e",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "0 auto 1.25rem"
+                  }}
+                >
                   <AlertCircle size={32} />
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "0.5rem" }}>
                   No encontramos resultados exactos
                 </h3>
-                <p className="text-slate-400 max-w-md mx-auto text-xs sm:text-sm mb-6 leading-relaxed">
-                  Los filtros actuales no coinciden con ninguna ficha activa. Para evitar callejones sin salida, prueba restablecer o explorar opciones populares:
+                <p style={{ color: "var(--text-muted)", maxWidth: "480px", margin: "0 auto 1.75rem", fontSize: "0.95rem" }}>
+                  Los filtros aplicados no coinciden con ninguna oportunidad activa. Para evitar callejones sin salida, prueba restablecer los filtros o explorar opciones populares:
                 </p>
 
-                <div className="flex flex-wrap justify-center gap-2.5 mb-8">
-                  <button
-                    onClick={clearAllFilters}
-                    className="btn btn-primary min-h-[44px] py-2.5 px-5 text-xs sm:text-sm font-semibold rounded-xl"
-                  >
-                    <RotateCcw size={15} /> Restablecer filtros
+                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.6rem", marginBottom: "2rem" }}>
+                  <button onClick={clearAllFilters} className="btn btn-primary" style={{ minHeight: "44px" }}>
+                    <RotateCcw size={15} /> Restablecer todos los filtros
                   </button>
 
                   <button
@@ -641,7 +803,8 @@ export default function ExploreView() {
                       clearAllFilters();
                       handleCostSelect("gratis");
                     }}
-                    className="btn btn-secondary min-h-[44px] py-2.5 px-4 text-xs sm:text-sm font-semibold rounded-xl"
+                    className="btn btn-secondary"
+                    style={{ minHeight: "44px" }}
                   >
                     Ver cursos gratuitos
                   </button>
@@ -651,18 +814,25 @@ export default function ExploreView() {
                       clearAllFilters();
                       handleCategorySelect("empleo");
                     }}
-                    className="btn btn-secondary min-h-[44px] py-2.5 px-4 text-xs sm:text-sm font-semibold rounded-xl"
+                    className="btn btn-secondary"
+                    style={{ minHeight: "44px" }}
                   >
                     Ver pasantías abiertas
                   </button>
                 </div>
 
-                {/* Suggestions */}
-                <div className="border-t border-white/10 pt-6">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 text-left">
+                <div style={{ borderTop: "1px solid var(--border-subtle)", paddingTop: "2rem", marginTop: "1rem" }}>
+                  <h4 style={{ fontSize: "0.95rem", color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "1.25rem", textAlign: "left" }}>
                     Sugerencias que podrían interesarte:
                   </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(auto-fit, minmax(310px, 1fr))",
+                      gap: "1.5rem",
+                      textAlign: "left"
+                    }}
+                  >
                     {opportunities.slice(0, 2).map((sug) => (
                       <OpportunityCard key={sug.id} opportunity={sug} />
                     ))}
@@ -674,64 +844,159 @@ export default function ExploreView() {
         </div>
       </div>
 
-      {/* MOBILE FILTERS MODAL / BOTTOM SHEET (Drawer with backdrop - does not push content down) */}
-      {mobileFilterOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex justify-end">
-          {/* Backdrop */}
+      {/* MOBILE FILTER MODAL DRAWER (Mounted via Portal into document.body to prevent backdrop-filter clipping) */}
+      {mobileFilterOpen &&
+        typeof document !== "undefined" &&
+        createPortal(
           <div
-            className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
-            onClick={() => setMobileFilterOpen(false)}
-          />
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              width: "100vw",
+              height: "100vh",
+              zIndex: 99999,
+              display: "flex",
+              justifyContent: "flex-end"
+            }}
+          >
+            {/* Dark Backdrop */}
+            <div
+              onClick={() => setMobileFilterOpen(false)}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: "rgba(0, 0, 0, 0.75)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)"
+              }}
+            />
 
-          {/* Drawer Panel */}
-          <div className="relative w-full max-w-sm sm:max-w-md bg-slate-900 border-l border-white/10 h-full p-5 sm:p-6 flex flex-col justify-between overflow-y-auto shadow-2xl z-10 animate-fade-in">
-            <div>
-              {/* Header */}
-              <div className="flex items-center justify-between pb-3.5 border-b border-white/10 mb-4">
-                <div className="flex items-center gap-2">
-                  <Filter size={18} className="text-indigo-400" />
-                  <h3 className="text-base font-bold text-slate-100">Filtros de Búsqueda</h3>
-                </div>
-                
-                {/* Close Button (44x44px min touch target) */}
-                <button
-                  onClick={() => setMobileFilterOpen(false)}
-                  className="min-w-[44px] min-h-[44px] w-11 h-11 rounded-xl flex items-center justify-center bg-white/5 border border-white/10 text-slate-300 hover:text-white"
-                  aria-label="Cerrar filtros"
+            {/* Slide-over Drawer Panel */}
+            <div
+              className="animate-fade-in"
+              style={{
+                position: "relative",
+                width: "100%",
+                maxWidth: "360px",
+                height: "100%",
+                maxHeight: "100vh",
+                background: "var(--bg-secondary)",
+                borderLeft: "1px solid var(--border-subtle)",
+                boxShadow: "var(--shadow-lg)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                padding: "1.25rem 1.5rem",
+                overflowY: "auto",
+                zIndex: 100000
+              }}
+            >
+              <div>
+                {/* Header */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    paddingBottom: "1rem",
+                    borderBottom: "1px solid var(--border-subtle)",
+                    marginBottom: "1rem"
+                  }}
                 >
-                  <X size={20} />
-                </button>
-              </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <Filter size={18} color="var(--primary-light)" />
+                    <h3 style={{ fontSize: "1.05rem", fontWeight: 700 }}>Filtros de Búsqueda</h3>
+                  </div>
 
-              {hasActiveFilters && (
-                <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/5">
-                  <span className="text-xs text-indigo-300">Hay filtros aplicados</span>
                   <button
-                    onClick={clearAllFilters}
-                    className="text-xs text-rose-400 font-semibold underline"
+                    onClick={() => setMobileFilterOpen(false)}
+                    className="btn-icon"
+                    style={{
+                      width: "44px",
+                      height: "44px",
+                      minWidth: "44px",
+                      minHeight: "44px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      background: "rgba(255, 255, 255, 0.05)",
+                      borderRadius: "var(--radius-md)",
+                      border: "1px solid var(--border-subtle)",
+                      color: "var(--text-main)"
+                    }}
+                    aria-label="Cerrar filtros"
                   >
-                    Restablecer todos
+                    <X size={20} />
                   </button>
                 </div>
-              )}
 
-              {/* Filter Options */}
-              {renderFilterBody(true)}
-            </div>
+                {hasActiveFilters && (
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "0.75rem", marginBottom: "1rem", borderBottom: "1px solid var(--border-subtle)" }}>
+                    <span style={{ fontSize: "0.8rem", color: "var(--primary-light)" }}>Hay filtros aplicados</span>
+                    <button
+                      onClick={clearAllFilters}
+                      style={{ fontSize: "0.8rem", color: "#f87171", textDecoration: "underline", cursor: "pointer", fontWeight: 600 }}
+                    >
+                      Restablecer todos
+                    </button>
+                  </div>
+                )}
 
-            {/* Bottom Apply Action */}
-            <div className="pt-4 border-t border-white/10 mt-6 sticky bottom-0 bg-slate-900 pb-1">
-              <button
-                onClick={() => setMobileFilterOpen(false)}
-                className="btn btn-primary w-full min-h-[48px] py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20"
-              >
-                <span>Ver {filteredResults.length} {filteredResults.length === 1 ? "resultado" : "resultados"}</span>
-                <ArrowRight size={16} />
-              </button>
+                {/* Filter Options */}
+                {renderFilterBody()}
+              </div>
+
+              {/* Bottom Apply Action */}
+              <div style={{ paddingTop: "1rem", borderTop: "1px solid var(--border-subtle)", marginTop: "1.5rem" }}>
+                <button
+                  onClick={() => setMobileFilterOpen(false)}
+                  className="btn btn-primary"
+                  style={{ width: "100%", minHeight: "48px", fontSize: "0.95rem", fontWeight: 700 }}
+                >
+                  <span>Ver {filteredResults.length} {filteredResults.length === 1 ? "resultado" : "resultados"}</span>
+                  <ArrowRight size={16} />
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
+
+      {/* Responsive layout styles */}
+      <style>{`
+        .explore-main-layout {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+          .explore-main-layout {
+            grid-template-columns: 280px 1fr !important;
+          }
+          .explore-desktop-sidebar {
+            display: block !important;
+          }
+          .mobile-filter-trigger {
+            display: none !important;
+          }
+        }
+
+        @media (max-width: 1023px) {
+          .explore-desktop-sidebar {
+            display: none !important;
+          }
+          .mobile-filter-trigger {
+            display: inline-flex !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
