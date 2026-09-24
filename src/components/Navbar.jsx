@@ -47,7 +47,7 @@ export default function Navbar() {
     { label: "Explorar", route: "/explorar", icon: <Search size={18} /> },
     { label: "Recursos & Tips", route: "/recursos", icon: <Newspaper size={18} /> },
     {
-      label: "Guía & Pitch",
+      label: "Guía & Tour",
       route: "/guia",
       icon: <BookOpen size={18} />
     },

@@ -144,7 +144,7 @@ export default function Footer() {
                   onClick={() => navigateTo("/guia")}
                   style={{ color: "var(--primary-light)", fontWeight: 600 }}
                 >
-                  Guía, Pitch & Tríptico
+                  Guía & Tour
                 </button>
               </li>
               <li>

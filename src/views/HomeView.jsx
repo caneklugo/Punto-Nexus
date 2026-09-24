@@ -103,7 +103,7 @@ export default function HomeView() {
                 gap: "4px"
               }}
             >
-              <BookOpen size={12} /> Guía & Pitch
+              <BookOpen size={12} /> Guía & Tour
             </button>
           </div>
 
