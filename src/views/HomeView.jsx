@@ -67,6 +67,8 @@ export default function HomeView() {
             style={{
               display: "inline-flex",
               alignItems: "center",
+              flexWrap: "wrap",
+              justifyContent: "center",
               gap: "0.5rem",
               padding: "0.4rem 1rem",
               borderRadius: "var(--radius-full)",
@@ -84,6 +86,25 @@ export default function HomeView() {
             <span style={{ color: "#38bdf8", display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
               <ShieldCheck size={13} /> Cero Desinformación
             </span>
+            <span style={{ color: "rgba(255, 255, 255, 0.3)" }}>|</span>
+            <button
+              onClick={() => navigateTo("/guia")}
+              style={{
+                background: "rgba(99, 102, 241, 0.3)",
+                border: "1px solid rgba(99, 102, 241, 0.5)",
+                color: "#ffffff",
+                padding: "2px 8px",
+                borderRadius: "var(--radius-full)",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "4px"
+              }}
+            >
+              <BookOpen size={12} /> Guía & Pitch
+            </button>
           </div>
 
           {/* Hero Title */}

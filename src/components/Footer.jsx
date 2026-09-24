@@ -141,6 +141,14 @@ export default function Footer() {
               </li>
               <li>
                 <button
+                  onClick={() => navigateTo("/guia")}
+                  style={{ color: "var(--primary-light)", fontWeight: 600 }}
+                >
+                  Guía, Pitch & Tríptico
+                </button>
+              </li>
+              <li>
+                <button
                   onClick={() => navigateTo("/mi-tablero")}
                   style={{ color: "var(--text-muted)" }}
                 >

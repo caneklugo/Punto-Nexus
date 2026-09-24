@@ -11,6 +11,7 @@ import OpportunityDetail from "./views/OpportunityDetail";
 import UserDashboard from "./views/UserDashboard";
 import ResourcesView from "./views/ResourcesView";
 import AdminCMS from "./views/AdminCMS";
+import GuideView from "./views/GuideView";
 
 function MainContent() {
   const { currentRoute } = useApp();
@@ -34,6 +35,9 @@ function MainContent() {
     }
     if (currentRoute === "/admin") {
       return <AdminCMS />;
+    }
+    if (currentRoute === "/guia") {
+      return <GuideView />;
     }
     return <HomeView />;
   };

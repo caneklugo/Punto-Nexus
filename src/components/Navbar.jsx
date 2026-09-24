@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Compass, Bookmark, ShieldCheck, Newspaper, User, ChevronDown, Check, Menu, X, PlusCircle, Search, ArrowRight } from "lucide-react";
+import { Compass, Bookmark, ShieldCheck, Newspaper, User, ChevronDown, Check, Menu, X, PlusCircle, Search, ArrowRight, BookOpen } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import logoIcon from "../assets/logo-icon.png";
 
@@ -46,6 +46,11 @@ export default function Navbar() {
     { label: "Inicio", route: "/", icon: <Compass size={18} /> },
     { label: "Explorar", route: "/explorar", icon: <Search size={18} /> },
     { label: "Recursos & Tips", route: "/recursos", icon: <Newspaper size={18} /> },
+    {
+      label: "Guía & Pitch",
+      route: "/guia",
+      icon: <BookOpen size={18} />
+    },
     {
       label: "Mi Tablero",
       route: "/mi-tablero",
