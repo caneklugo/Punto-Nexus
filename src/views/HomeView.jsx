@@ -114,54 +114,118 @@ export default function HomeView() {
           {/* Large Hero Search Bar (100% width on mobile, max 680px on desktop) */}
           <form
             onSubmit={handleHeroSearchSubmit}
+            className="hero-search-form"
             style={{
               maxWidth: "680px",
-              margin: "0 auto 2.25rem",
+              margin: "0 auto 2rem",
               position: "relative",
               width: "100%"
             }}
           >
             <div
-              className="glass-panel"
+              className="glass-panel hero-search-container"
               style={{
                 display: "flex",
                 alignItems: "center",
-                padding: "0.6rem 0.8rem 0.6rem 1.35rem",
                 borderRadius: "var(--radius-full)",
                 border: "1px solid var(--border-focus)",
                 boxShadow: "0 10px 30px rgba(99, 102, 241, 0.2)",
-                background: "rgba(21, 27, 46, 0.9)"
+                background: "rgba(21, 27, 46, 0.9)",
+                transition: "all var(--transition-normal)",
+                position: "relative"
               }}
             >
-              <Search size={22} color="var(--primary-light)" style={{ marginRight: "0.75rem", flexShrink: 0 }} />
-              <input
-                type="text"
-                value={heroSearchInput}
-                onChange={(e) => setHeroSearchInput(e.target.value)}
-                placeholder="¿Qué deseas lograr? (Ej. Beca, React, Pasantía...)"
+              <div
                 style={{
+                  display: "flex",
+                  alignItems: "center",
                   flex: 1,
-                  background: "transparent",
-                  border: "none",
-                  color: "var(--text-main)",
-                  fontSize: "1.05rem",
-                  minHeight: "44px"
-                }}
-              />
-              <button
-                type="submit"
-                className="btn btn-primary"
-                style={{
-                  borderRadius: "var(--radius-full)",
-                  padding: "0.65rem 1.6rem",
-                  minHeight: "44px",
-                  fontSize: "0.95rem"
+                  minWidth: 0,
+                  paddingLeft: "1.1rem"
                 }}
               >
-                Buscar
+                <Search size={20} color="var(--primary-light)" style={{ marginRight: "0.6rem", flexShrink: 0 }} />
+                <input
+                  type="text"
+                  value={heroSearchInput}
+                  onChange={(e) => setHeroSearchInput(e.target.value)}
+                  placeholder="¿Qué deseas lograr? (Beca, React...)"
+                  className="hero-search-input"
+                  style={{
+                    width: "100%",
+                    background: "transparent",
+                    border: "none",
+                    color: "var(--text-main)",
+                    minHeight: "44px"
+                  }}
+                />
+              </div>
+
+              {/* Action Button: Text + Arrow on desktop, compact and elegant on mobile */}
+              <button
+                type="submit"
+                className="btn btn-primary hero-search-btn"
+                aria-label="Buscar convocatorias"
+              >
+                <span className="hero-search-btn-text">Buscar</span>
+                <ArrowRight size={17} className="hero-search-btn-icon" />
               </button>
             </div>
           </form>
+
+          {/* Hero Search Responsive Styles */}
+          <style>{`
+            .hero-search-container {
+              padding: 0.35rem 0.45rem 0.35rem 1.1rem;
+            }
+            .hero-search-input {
+              font-size: 0.95rem;
+            }
+            .hero-search-btn {
+              border-radius: var(--radius-full) !important;
+              min-height: 44px !important;
+              padding: 0.6rem 1.4rem !important;
+              font-size: 0.925rem !important;
+              display: inline-flex;
+              align-items: center;
+              gap: 0.4rem;
+              flex-shrink: 0;
+            }
+            .hero-search-btn-icon {
+              display: none;
+            }
+            @media (max-width: 639px) {
+              .hero-search-container {
+                padding: 0.25rem 0.35rem 0.25rem 0.85rem;
+              }
+              .hero-search-input {
+                font-size: 0.875rem;
+              }
+              .hero-search-btn {
+                padding: 0.55rem 0.95rem !important;
+                font-size: 0.85rem !important;
+                gap: 0.3rem;
+                min-width: 44px !important;
+              }
+              .hero-search-btn-icon {
+                display: inline-block;
+              }
+            }
+            @media (max-width: 380px) {
+              .hero-search-btn-text {
+                display: none;
+              }
+              .hero-search-btn {
+                width: 44px !important;
+                height: 44px !important;
+                padding: 0 !important;
+                justify-content: center;
+              }
+              .hero-search-btn-icon {
+                display: block;
+              }
+            }
+          `}</style>
 
           {/* Intent Quick-Access Chips */}
           <div>
