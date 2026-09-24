@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* ==========================================================================
    PUNTO NEXUS - DESIGN SYSTEM & CORE STYLES
    ========================================================================== */
@@ -158,8 +160,22 @@ input, textarea, select {
   max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
 
 /* Glassmorphism Surface */
@@ -200,11 +216,13 @@ input, textarea, select {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.65rem 1.25rem;
+  min-height: 44px;
   font-size: 0.925rem;
   font-weight: 600;
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
   white-space: nowrap;
+  touch-action: manipulation;
 }
 
 .btn-primary {
@@ -251,6 +269,7 @@ input, textarea, select {
 .btn-ghost {
   color: var(--text-muted);
   background: transparent;
+  min-height: 44px;
 }
 
 .btn-ghost:hover {
@@ -259,8 +278,10 @@ input, textarea, select {
 }
 
 .btn-icon {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   border-radius: var(--radius-md);
   display: inline-flex;
@@ -268,6 +289,7 @@ input, textarea, select {
   justify-content: center;
   color: var(--text-muted);
   transition: all var(--transition-fast);
+  touch-action: manipulation;
 }
 
 .btn-icon:hover {
@@ -276,8 +298,10 @@ input, textarea, select {
 }
 
 .btn-bookmark {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: var(--radius-full);
   background: rgba(15, 20, 34, 0.85);
   border: 1px solid var(--border-subtle);
@@ -286,10 +310,12 @@ input, textarea, select {
   align-items: center;
   justify-content: center;
   transition: all var(--transition-fast);
+  touch-action: manipulation;
+  cursor: pointer;
 }
 
 .btn-bookmark:hover {
-  transform: scale(1.1);
+  transform: scale(1.08);
   color: #fbbf24;
   border-color: rgba(251, 191, 36, 0.4);
 }
@@ -481,3 +507,13 @@ input, textarea, select {
   color: white;
   border-radius: var(--radius-full);
 }
+
+/* Hide scrollbar for Chrome, Safari, Edge, Firefox */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

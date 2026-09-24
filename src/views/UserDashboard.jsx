@@ -230,9 +230,9 @@ export default function UserDashboard() {
               </button>
             </div>
 
-            {/* List / Cards */}
+            {/* List / Cards (1 col mobile, 2 col tablet, 3 col desktop) */}
             {displayedFavorites.length > 0 ? (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "1.5rem" }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {displayedFavorites.map((opp) => {
                   const currentStatus = applicationTracker[opp.id] || "guardado";
                   return (

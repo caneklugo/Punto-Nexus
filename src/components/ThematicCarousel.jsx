@@ -15,40 +15,21 @@ export default function ThematicCarousel({ title, subtitle, icon, opportunities,
   if (!opportunities || opportunities.length === 0) return null;
 
   return (
-    <div style={{ marginBottom: "3rem" }}>
+    <div className="mb-8 sm:mb-12">
       {/* Section Header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "1.25rem",
-          gap: "1rem"
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+      <div className="flex items-center justify-between gap-3 mb-4 sm:mb-6">
+        <div className="flex items-center gap-3 min-w-0">
           {icon && (
-            <div
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "var(--radius-md)",
-                background: "rgba(99, 102, 241, 0.15)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "var(--primary-light)"
-              }}
-            >
+            <div className="w-10 h-10 sm:w-11 sm:h-11 min-w-[40px] min-h-[40px] rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 flex-shrink-0">
               {icon}
             </div>
           )}
-          <div>
-            <h3 style={{ fontSize: "1.35rem", fontWeight: 700, color: "var(--text-main)" }}>
+          <div className="min-w-0">
+            <h3 className="text-base sm:text-xl md:text-2xl font-bold text-slate-100 truncate">
               {title}
             </h3>
             {subtitle && (
-              <p style={{ fontSize: "0.85rem", color: "var(--text-dim)", marginTop: "2px" }}>
+              <p className="text-xs sm:text-sm text-slate-400 mt-0.5 truncate hidden sm:block">
                 {subtitle}
               </p>
             )}
@@ -56,12 +37,11 @@ export default function ThematicCarousel({ title, subtitle, icon, opportunities,
         </div>
 
         {/* Controls */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           {onSeeAll && (
             <button
               onClick={onSeeAll}
-              className="btn btn-ghost"
-              style={{ fontSize: "0.825rem", padding: "0.4rem 0.75rem" }}
+              className="btn btn-ghost min-h-[44px] py-2 px-3 text-xs sm:text-sm text-indigo-400 hover:text-indigo-300 font-semibold"
             >
               Ver todas ({opportunities.length})
             </button>
@@ -69,54 +49,39 @@ export default function ThematicCarousel({ title, subtitle, icon, opportunities,
 
           <button
             onClick={() => scroll("left")}
-            className="btn-icon"
-            style={{
-              background: "rgba(255, 255, 255, 0.05)",
-              border: "1px solid var(--border-subtle)",
-              width: "34px",
-              height: "34px"
-            }}
-            aria-label="Anterior"
+            className="hidden sm:flex min-w-[44px] min-h-[44px] w-11 h-11 items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
+            aria-label="Desplazar a la izquierda"
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={20} />
           </button>
 
           <button
             onClick={() => scroll("right")}
-            className="btn-icon"
-            style={{
-              background: "rgba(255, 255, 255, 0.05)",
-              border: "1px solid var(--border-subtle)",
-              width: "34px",
-              height: "34px"
-            }}
-            aria-label="Siguiente"
+            className="hidden sm:flex min-w-[44px] min-h-[44px] w-11 h-11 items-center justify-center rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors"
+            aria-label="Desplazar a la derecha"
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={20} />
           </button>
         </div>
       </div>
 
-      {/* Horizontal Scrollable Container */}
+      {/* Mobile subtitle when truncated above */}
+      {subtitle && (
+        <p className="text-xs text-slate-400 -mt-2 mb-3 sm:hidden">
+          {subtitle}
+        </p>
+      )}
+
+      {/* Horizontal Native Touch Swipeable Container */}
       <div
         ref={scrollContainerRef}
-        style={{
-          display: "flex",
-          gap: "1.25rem",
-          overflowX: "auto",
-          paddingBottom: "1rem",
-          scrollSnapType: "x mandatory",
-          scrollbarWidth: "thin"
-        }}
+        className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-4 sm:gap-6 pb-4 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0"
+        style={{ WebkitOverflowScrolling: "touch" }}
       >
         {opportunities.map((opp) => (
           <div
             key={opp.id}
-            style={{
-              flex: "0 0 340px",
-              maxWidth: "340px",
-              scrollSnapAlign: "start"
-            }}
+            className="flex-none w-[84vw] sm:w-[320px] md:w-[350px] snap-start"
           >
             <OpportunityCard opportunity={opp} />
           </div>
